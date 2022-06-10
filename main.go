@@ -145,6 +145,8 @@ func logout(res http.ResponseWriter, req *http.Request) {
 	sessionCookie := getSessionCookie(req)
 	sessionCookie.MaxAge = -1
 	http.SetCookie(res, sessionCookie)
+
+	delete(Sessions, sessionCookie.Value)
 	http.Redirect(res, req, "/", http.StatusSeeOther)
 }
 
