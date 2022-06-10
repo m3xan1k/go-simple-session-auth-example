@@ -81,15 +81,15 @@ func signup(res http.ResponseWriter, req *http.Request) {
 	if req.Method == http.MethodPost {
 		username := req.FormValue("username")
 		password := req.FormValue("password")
-		hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-		if err != nil {
-			log.Panic(err)
-		}
 		_, exists := Users[username]
 		if exists {
 			msg := "Username already exists"
 			tpl.ExecuteTemplate(res, "signup.html", msg)
 			return
+		}
+		hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+		if err != nil {
+			log.Panic(err)
 		}
 		Users[username] = User{Username: username, PasswordHash: hash}
 		http.Redirect(res, req, "/login", http.StatusSeeOther)
